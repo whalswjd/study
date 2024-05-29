@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- 경로지정 -->
+<mapper namespace="com.sist.web.dao.UserDao">
+
+		<!--복잡한 결과 매핑을 간편하게 만들어주기 위해 만들어진 태그 -->
+	<resultMap type="com.sist.web.model.User" id="userResultMap">
+		<!-- id - pk -->
+		<!-- column은 컬럼명, property는 model에 인스턴스명 -->
+		<id column ="USER_ID" property="userId" /> 
+		<result column ="USER_PWD" property="userPwd" /> 
+		<result column ="USER_NAME" property="userName" /> 
+		<result column ="USER_EMAIL" property="userEmail" /> 
+		<result column ="STATUS" property="status" /> 
+		<result column ="REG_DATE" property="regDate" /> 
+	</resultMap>
+	
+	
+ <!-- id <-> method명과 같아야함, method 매개변수 String 
+ 	ex) public User userSelect (String userId)  -->
+ 	
+<select id="userSelect" parameterType="String" resultMap="userResultMap">
+	SELECT USER_ID, 
+	       NVL(USER_PWD, '') USER_PWD, 
+	       NVL(USER_NAME, '') USER_NAME, 
+	       NVL(USER_EMAIL, '') USER_EMAIL, 
+	       NVL(STATUS, 'N') STATUS, 
+	       NVL(TO_CHAR(REG_DATE, 'YYYY-MM-DD HH24:MI:SS'), '') REG_DATE
+	  FROM TBL_USER 
+	 WHERE USER_ID = #{value}
+ 	<!-- 받아온 값을 value에 넣음 -->
+</select>
+
+<!-- 인스턴스명과 같아야함 -->
+<insert id="userInsert" parameterType="com.sist.web.model.User">
+	INSERT INTO TBL_USER (USER_ID, USER_PWD, USER_NAME, USER_EMAIL, STATUS, REG_DATE)
+	VALUES(#{userId}, #{userPwd}, #{userName}, #{userEmail}, #{status}, SYSDATE)
+</insert>
+
+
+<update id="userUpdate" parameterType="com.sist.web.model.User">
+	UPDATE TBL_USER
+   	   SET USER_PWD = #{userPwd},
+           USER_NAME = #{userName},
+       	   USER_EMAIL = #{userEmail}
+     WHERE USER_ID = #{userId}
+</update>
+</mapper>

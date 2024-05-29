@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.sist.study.dao.UserDao">
+
+	<resultMap type="com.sist.study.model.User" id="userResultMap">
+		<id column ="USER_ID" property="userId" /> 
+		<result column ="USER_PWD" property="userPwd" /> 
+		<result column ="USER_NAME" property="userName" /> 
+		<result column ="USER_EMAIL" property="userEmail" /> 
+		<result column ="USER_TEL" property="userTel" /> 
+		<result column ="USER_POINT" property="userPoint" /> 
+		<result column ="USER_BIRTH" property="userBirth" /> 
+		<result column ="STATUS" property="status" /> 
+		<result column ="USER_DATE" property="regDate" /> 
+	</resultMap>
+	
+<select id="userSelect" parameterType="String" resultMap="userResultMap">
+SELECT
+    USER_ID,
+    NVL(USER_PWD,'') USER_PWD,
+    NVL(USER_NAME,'') USER_NAME,
+    NVL(USER_EMAIL,'') USER_EMAIL,
+    NVL(USER_TEL,'') USER_TEL,
+    NVL(USER_POINT,0) USER_POINT,
+    NVL(USER_ADDRESS,'') USER_ADDRESS,
+    NVL(USER_BIRTH,'') USER_BIRTH,
+    NVL(STATUS,'Y') STATUS,
+    NVL(REG_DATE,'') REG_DATE
+FROM
+    ST_USER
+WHERE USER_ID = #{value}
+</select>
+<select id="userEmailSelect" parameterType="String" resultMap="userResultMap">
+SELECT
+    USER_ID,
+    NVL(USER_PWD,'') USER_PWD,
+    NVL(USER_NAME,'') USER_NAME,
+    NVL(USER_EMAIL,'') USER_EMAIL,
+    NVL(USER_TEL,'') USER_TEL,
+    NVL(USER_POINT,0) USER_POINT,
+    NVL(USER_ADDRESS,'') USER_ADDRESS,
+    NVL(USER_BIRTH,'') USER_BIRTH,
+    NVL(STATUS,'Y') STATUS,
+    NVL(REG_DATE,'') REG_DATE
+FROM
+    ST_USER
+WHERE USER_EMAIL = #{value}
+</select>
+<update id="userpwdUpdate" parameterType="com.sist.study.model.User" >
+UPDATE ST_USER
+   SET USER_PWD = #{userPwd}
+ WHERE USER_ID = #{userId}
+</update>
+<insert id="nomalUserInsert" parameterType="com.sist.study.model.User">
+INSERT INTO ST_USER (
+    USER_ID,
+    USER_PWD,
+    USER_EMAIL,
+    USER_POINT,
+    STATUS,
+    REG_DATE
+) VALUES (
+    #{userId},
+    #{userPwd},
+    #{userEmail},
+    0,
+    'Y',
+    SYSDATE
+)
+</insert>
+</mapper>

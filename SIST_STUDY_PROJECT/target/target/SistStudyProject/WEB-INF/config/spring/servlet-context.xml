@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/mvc
+		 				   http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+		 				   
+	<!-- 
+		Annotation을 활용할 때 기본적인 Default 방식을 설정
+		mvc:annotation-driven : 1. Spring MVC 컴포넌트들을 디폴트 설정을 통해 활성화한다.
+		                        2. Spring MVC @Controller에 요청을 보내기 위해 필요한 HandlerMapping과 HandlerAdapter를 Bean으로 등록한다.
+		                           - HandlerMapping : HTTP 요청정보를 이용해서 컨트롤러를 찾아주는 기능
+                                   - HandlerAdapter : HandlerMapping을 통해 찾은 컨트롤러를 직접 실행하는 기능을 수행
+		                        3. context:component-scan 을 명시하면 mvc:annotation-driven 포함하지 않아도 된다. 
+	-->
+	<!-- mvc:annotation-driven / -->
+    
+    <!-- 어노테이션 controller 스캔 시작 -->
+    <context:component-scan base-package="com.sist.manager.controller,com.sist.manager.handler" />
+    <!-- 어노테이션 controller 스캔 종료 -->
+    
+    <mvc:annotation-driven>
+        <!-- 
+        	메세지 컨버터는 XML이나 JSON을 이용한 AJAX 기능이나 웹 서비스를 개발할 때 사용할 수 있다.
+            HTTP 요청 프로퍼티를 모델 오브젝트의 프로퍼티에 개별적으로 바인딩하고 모델 오브젝트를 
+            다시 뷰를 이용해 클라이언트로 보낼 콘텐츠를 만드는 대신, HTTP 요청 메세지 본문과 
+            HTTP 응답 메세지 본문을 통째로 메세지로 다루는 방식이다. 
+            메세지 컨버터는 파라미터의 @RequestBody와 메소드에 부여한 @ResponseBody를 이용한다.
+            
+            - 메시지 컨버터를 gson으로 사용
+         -->
+   		<mvc:message-converters>
+      		<bean class="org.springframework.http.converter.json.GsonHttpMessageConverter">
+    			<property name="gson">
+                	<bean class="org.springframework.http.converter.json.GsonFactoryBean">
+                		<property name="serializeNulls" value="true" /> <!-- 값이 null인 필드도 표시 -->
+                		<property name="prettyPrinting" value="true" /> <!-- 개행 구분하여 출력 (운영시에는 빼는게 좋음) -->
+                	</bean>
+            	</property>
+      		</bean>
+      	</mvc:message-converters>
+    </mvc:annotation-driven>
+        
+    <!-- url 매핑 시작 (이미지, 자바스트립트, 스타일시트 디렉토리)-->
+    <mvc:resources mapping="/resources/**" location="/WEB-INF/views/resources/" />
+    <!-- url 매핑 종료 -->
+    
+
+    
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"> 
+    	<property name="contentType" value="application/json; charset=UTF-8" />
+    </bean>
+    
+    <!-- ############################### View Resolver 시작 ############################### -->
+    <!--  
+    	spring 에는 다양한 View Resolver 가 있다. 
+    -->
+    
+    <!-- BeanNameViewResolver 시작 -->
+    <!-- 
+        BeanNameViewResolver (파일 다운로드 fileDownloadView 를 호출하기 위해 설정)
+    	  
+    	  호출된 View Name 과 일치하는 bean id 가 있다면 
+    	  (즉, Controller Class 에서 리턴된 View Name 과 일치하는 bean id 가 있는 경우)
+    	  
+    	  View Name과 일치하는 bean id 를 찾아서 실행한다.
+    	  
+    	  * 호출된 View Name 이 null 이면 다음 View Resolver를 실행 한다.
+    	    (여기서는 org.springframework.web.servlet.view.InternalResourceViewResolver)
+    -->
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+    	<property name="order" value="0"/> <!-- 순서 (순서가 작은것 부터 처리된다) -->
+    </bean>
+    <!-- BeanNameViewResolver 종료 -->
+    
+    <!-- InternalResourceViewResolver 시작 -->
+    <!--
+	    InternalResourceViewResolver
+	    웹 어플리케이션 안에 포함된 View Template
+	    컨트롤러에서 리턴하는 뷰 이름에 접두사, 접미사를 붙여서 JSP페이지의 경로를 찾는다. 
+	-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" /> <!-- JSTL 사용 -->
+        <property name="prefix" value="/WEB-INF/views" /> <!-- 접두사 -->
+        <property name="suffix" value=".jsp" />           <!-- 접미사 -->
+        <property name="order" value="1" />               <!-- 순서 -->
+    </bean>
+    <!-- InternalResourceViewResolver 종료 -->
+    
+    <!-- ############################### View Resolver 종료 ############################### -->
+    	 	
+</beans>

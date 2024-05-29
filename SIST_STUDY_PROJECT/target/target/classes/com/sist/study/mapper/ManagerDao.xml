@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.sist.study.dao.ManagerDao">
+
+	<resultMap type="com.sist.study.model.Manager" id="managerResultMap">
+		<id column ="MANAGER_ID" property="managerId" /> 
+		<result column ="MANAGER_PWD" property="managerPwd" /> 
+		<result column ="MANAGER_NAME" property="managerName" /> 
+		<result column ="MANAGER_NICKNAME" property="managerNickname" /> 
+		<result column ="STATUS" property="status" /> 
+		<result column ="MANAGER_DATE" property="managerDate" /> 
+	</resultMap>
+	
+<select id="managerSelect" parameterType="String" resultMap="managerResultMap">
+	SELECT MANAGER_ID, 
+	       MANAGER_PWD, 
+	       MANAGER_NAME, 
+	       MANAGER_NICKNAME, 
+	       STATUS, 
+	       TO_CHAR(MANAGER_DATE, 'YYYY-MM-DD HH24:MI:SS') MANAGER_DATE
+	  FROM MANAGER_DATA 
+	 WHERE MANAGER_ID = #{value}
+</select>
+
+</mapper>
