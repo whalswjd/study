@@ -1,0 +1,110 @@
+.main {
+    width: 350px;
+    margin: 0 auto;
+    margin-top: 3rem;
+}
+
+.container {
+    background: #fff;
+    width: 350px;
+    border: 1px solid #dbdbdb;
+    margin-bottom: 0.6rem;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.logo {
+    width: 15rem;
+    margin: 0 auto;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    cursor: pointer;
+}
+
+.logo .brand_logo {
+    width: 100%;
+    height: auto;
+}
+
+.centent {
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    width: 250px;
+    height: 40px;
+    margin: 0 auto;
+    border: 1px solid;
+    border-radius: 5px;
+    text-indent: 5px;
+}
+
+button {
+    width: 255px;
+    height: 30px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 5px;
+    background-color: #4cb5f9;
+    font-weight: bold;
+    font-size: medium;
+    color: #fff;
+}
+
+.content_text {
+    margin: 0 40px 10px;
+}
+
+.input_value {
+    margin: 0 40px 6px;
+    position: relative;
+}
+
+.btn_submit {
+    margin: 8px;
+}
+
+.showPw {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    width: auto;
+    height: auto;
+    transform: translateY(-50%);
+    cursor: pointer;
+    border: none;
+    background-color: #fff;
+}
+
+.or_line {
+    display: flex;
+    align-items: center;
+    margin: 1rem auto 0;
+    justify-content: center;
+}
+
+.line {
+    border-bottom: 1px solid #828181;
+    width: 6.3rem;
+}
+
+.text {
+    margin: 0 10px;
+    font-weight: bold;
+    color: #828181;
+}
+
+.find_pw {
+    margin: 0.6rem 0;
+    font-size: small;
+    text-align: center;
+}
+
+.return {
+    margin-top: 70px;
+}

@@ -1,0 +1,381 @@
+@charset "UTF-8";
+
+		body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        section {
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  /* 최대 너비를 늘린 값 (필요에 따라 조절 가능) */
+}
+
+.section {
+  max-width: 800px; /* 최대 너비를 늘린 값 (필요에 따라 조절 가능) */
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+ .spaced-text {
+    margin-right: 5px; /* 원하는 여백 크기를 설정 */
+  }
+.section-mini {
+  max-width: 800px; /* 최대 너비를 늘린 값 (필요에 따라 조절 가능) */
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  background-color: #ededed;
+}
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+        
+        
+
+        .button-nomal {
+            background-color: #5299f7;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            position: absolute;
+            z-index: 0;
+        }
+
+        button:hover {
+            background-color: #b7d3f7;
+            
+        }
+         button:disabled {
+            background-color: #455063; /* 원하는 색상으로 변경 */
+            cursor: not-allowed;
+        }
+        
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+        .profile-image2 {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+        #charCount {
+		    position: absolute;
+		    bottom: 18px;
+		    right: 10px;
+		    color: #888;
+		    font-size: 11px;
+		}
+		.input-file {
+			background-color: #5299f7;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            position: absolute;
+		}
+		.file-input {
+		    opacity: 0; /* 실제로 보이지 않도록 설정 */
+		    position: absolute; /* 절대 위치 설정 */
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+		}
+		
+		/* input type="file"을 감싸는 래퍼의 스타일 */
+		.file-wrapper {
+		    position: relative; /* 상대적 위치 설정 */
+		    display: inline-block; /* 인라인 블록 요소로 설정 */
+		}
+		
+			#charCount {
+			    position:  absolute;
+			    bottom: 70px;
+			    right: 26px;
+			}
+			
+			#nowCnt {
+			    position: relative;
+			  	right:3px;
+			}
+			.button {
+				  background-color: #f0f0f0; /* 연한 회색 배경색 */
+				  padding: 8px 8px; /* 내부 여백 설정 (상하 8px, 좌우 16px) */
+				  border: none; /* 테두리 없음 */
+				  border-radius: 5px; /* 둥근 테두리 설정 */
+				  color: #333; /* 텍스트 색상 설정 */
+				  text-align: center; /* 텍스트 가운데 정렬 */
+				  text-decoration: none; /* 링크의 기본 텍스트 밑줄 제거 */
+				  display: inline-block; /* 인라인 레벨 블록 요소로 설정하여 여러 버튼이 나란히 나타나도록 함 */
+				  font-size: 14px; /* 폰트 크기 설정 */
+				  line-height: 1.5; /* 행간 설정 (높이를 줄이기 위해 필요에 따라 조절 가능) */
+				  cursor: pointer; /* 커서 모양을 포인터로 설정하여 클릭 가능함을 나타냄 */
+				  width: 100px; /* 너비 설정 */
+  				  height: 30px; /* 높이 설정 */
+				}
+			.button-followed{
+				background-color: #3897f0; /* 연한 회색 배경색 */
+				  padding: 8px 8px; /* 내부 여백 설정 (상하 8px, 좌우 16px) */
+				  border: none; /* 테두리 없음 */
+				  border-radius: 5px; /* 둥근 테두리 설정 */
+				  color: white; /* 텍스트 색상 설정 */
+				  text-align: center; /* 텍스트 가운데 정렬 */
+				  text-decoration: none; /* 링크의 기본 텍스트 밑줄 제거 */
+				  display: inline-block; /* 인라인 레벨 블록 요소로 설정하여 여러 버튼이 나란히 나타나도록 함 */
+				  font-size: 14px; /* 폰트 크기 설정 */
+				  line-height: 1.5; /* 행간 설정 (높이를 줄이기 위해 필요에 따라 조절 가능) */
+				  cursor: pointer; /* 커서 모양을 포인터로 설정하여 클릭 가능함을 나타냄 */
+				  width: 100px; /* 너비 설정 */
+  				  height: 30px; /* 높이 설정 */
+			}
+			.button-2{
+				  background-color: #f8f8f8; /* 연한 회색 배경색 */
+				  padding: 8px 8px; 
+				  border: none; /* 테두리 없음 */
+				  border-radius: 5px; /* 둥근 테두리 설정 */
+				  color: #333; /* 텍스트 색상 설정 */
+				  text-align: center; /* 텍스트 가운데 정렬 */
+				  text-decoration: none; 
+				  display: inline-block; 
+				  font-size: 14px; /* 폰트 크기 설정 */
+				  line-height: 1.5; /* 행간 설정 (높이를 줄이기 위해 필요에 따라 조절 가능) */
+				  width: 100px; 
+  				  height: 30px; /* 높이 설정 */
+			}
+			.button-2:hover{
+				  background-color: #f8f8f8; /* 연한 회색 배경색 */
+				  padding: 8px 8px; 
+				  border: none; /* 테두리 없음 */
+				  border-radius: 5px; /* 둥근 테두리 설정 */
+				  color: #333; /* 텍스트 색상 설정 */
+				  text-align: center; /* 텍스트 가운데 정렬 */
+				  text-decoration: none; 
+				  display: inline-block; 
+				  font-size: 14px; /* 폰트 크기 설정 */
+				  line-height: 1.5; /* 행간 설정 (높이를 줄이기 위해 필요에 따라 조절 가능) */
+				  width: 100px; 
+  				  height: 30px; /* 높이 설정 */
+			}
+
+/* 버튼에 호버 효과 추가 */
+.button:hover {
+  background-color: #e0e0e0; /* 마우스 호버 시 조금 더 어두운 회색으로 변경 */
+}
+ .button-modal {
+      width: 100%; /* 버튼의 너비 (예: 150px) */
+	  height: 45px; /* 버튼의 높이 (예: 40px) */
+	  background-color: #ffffff; /* 초기 배경색 (흰색) */
+	  color: #000000; /* 초기 텍스트 색상 (검은색) */
+	  padding: 10px 20px; /* 내부 여백 */
+	  text-align: center;
+	  text-decoration: none;
+	  display: inline-block;
+	  font: inherit;
+	  font-size: 16px;
+	  cursor: pointer;
+	  border: none; /* 테두리 없음 */
+	  border-radius: 5px; /* 둥근 모서리 */
+	  transition: background-color 0.3s ease; /* 변화가 부드럽게 일어나도록 설정 */
+	  display: flex; /* 플렉스 컨테이너로 설정 */
+	  flex-direction: column; /* 수직으로 쌓도록 설정 */
+	  justify-content: center; /* 수직 가운데 정렬 */
+	  align-items: center;
+	  
+    }
+.button-modal:hover {
+    background-color: #ffcccd;/* 원하는 hover 시 색상 */;
+}
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 높이를 화면 전체 높이로 설정하거나 필요에 따라 조절하세요 */
+}
+.button-modal-exit {
+	 width: 100%; /* 버튼의 너비 (예: 150px) */
+	  height: 45px; /* 버튼의 높이 (예: 40px) */
+	  background-color: #ffffff; /* 초기 배경색 (흰색) */
+	  color: #000000; /* 초기 텍스트 색상 (검은색) */
+	  padding: 10px 20px; /* 내부 여백 */
+	  text-align: center;
+	  text-decoration: none;
+	  display: inline-block;
+	  font: inherit;
+	  font-size: 16px;
+	  cursor: pointer;
+	  border: none; /* 테두리 없음 */
+	  border-radius: 5px; /* 둥근 모서리 */
+	  transition: background-color 0.3s ease; /* 변화가 부드럽게 일어나도록 설정 */
+	  display: flex; /* 플렉스 컨테이너로 설정 */
+	  flex-direction: column; /* 수직으로 쌓도록 설정 */
+	  justify-content: center; /* 수직 가운데 정렬 */
+	  align-items: center;
+}
+.button-modal:hover {
+    background-color: #ffbdbe;/* 원하는 hover 시 색상 */;
+}
+@font-face {
+    font-family: 'Gmarket';
+    src: url('/resources/font/Gmarket.otf') format('opentype');
+}
+b {
+	font-family: 'Gmarket';
+}
+#preview {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 20px;
+            display: none; /* 초기에는 숨김 */
+        }
+hr{
+	border-color: #f0f0f0;
+}
+.image-container {
+      display: flex; /* Flexbox를 사용하여 가로로 배열 */
+      flex-wrap: wrap; /* 너비를 벗어나면 줄 바꿈 */
+      justify-content: center;
+    }
+
+    /* 각 이미지를 감싸는 div */
+    .image-box {
+      width: 30%; /* 부모의 30%만큼의 너비를 갖도록 설정 */
+      height: 170px;
+      margin: 3px; /* 각 이미지 사이의 간격 */
+      overflow: hidden; /* 초과된 부분 숨김 */
+      border-radius: 3px; /* 둥근 테두리 설정 (원형으로 보이게 하려면 반지름 값을 50%로 설정) */
+      position: relative;
+ 	  overflow: hidden;
+ 	  margin: 1px;
+    }
+
+    /* 이미지 스타일 */
+    .square-image {
+      width: 100%; /* 100% 너비로 설정하여 부모 컨테이너에 맞춤 */
+      height: 100%; /* 높이는 자동으로 조절되도록 설정 */
+      display: block; /* 인라인 요소가 아닌 블록 요소로 설정 */
+    }
+    .image-box {
+  
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 어두운 색상과 투명도 조절 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  opacity: 0; /* 초기에는 숨겨진 상태 */
+  transition: opacity 0.2s ease;
+}
+
+.image-box:hover .image-overlay {
+  opacity: 1; /* 마우스 오버 시 보이도록 설정 */
+}
+.viewModal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.viewModal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    transition: max-height 0.5s ease;
+}
+.viewModal-content:open {
+    transition: max-height 0.5s ease;
+}
+.sellModal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.sellModal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    height: 40%;
+    transition: max-height 0.5s ease;
+}
+.sellModal-content:open {
+    transition: max-height 0.5s ease;
+}
+.sellModal-btn{
+	background-color: #3897f0;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top:20px;
+}
+.sellModal-btn:hover{
+	background-color: #2f80b5;
+}
+
+

@@ -1,0 +1,78 @@
+@charset "UTF-8";
+@font-face {
+  font-family : 'barun';
+  src : /resources/font/NanumBarunGothic.ttf;
+}
+body{
+	fon-family:'barun';
+}
+.day{
+	font-size: 14px;
+    color: grey;
+    margin-top:2px;
+}
+.non-link {
+	color: black; /* 검은색으로 설정 */
+    text-decoration: none;
+}
+.viewModal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.viewModal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    transition: max-height 0.5s ease;
+}
+.viewModal-content:open {
+    transition: max-height 0.5s ease;
+}
+#submitBtn {
+        display: inline-block; /* 인라인 요소로 설정하여 텍스트와 함께 표시됩니다. */
+        padding: 8px 16px; /* 버튼 내부 여백 설정 */
+        background-color: white; 
+        color: black; /* 텍스트 색상 */
+        border: #dbdbdb; /
+        border-radius: 10px; 
+        font-size: 14px;
+        cursor: pointer; 
+    }
+
+    /* 마우스를 올렸을 때 버튼 스타일 변경 */
+#submitBtn:hover {
+    	border-radius: 10px; 
+        background-color: #f0f0f0; /* 마우스를 올렸을 때 배경색 변경 */
+    }
+.comment-area{
+	height: 18px; 
+	border-style: none; 
+	resize: none; 
+	outline: none; 
+	flex-grow: 1;
+}
+.followBtn{
+	background-color: white;
+	border-radius: 10px; 
+	border-style:none;
+	cursor: pointer; 
+	transition: background-color 0.3s ease;
+}
+.followBtn:hover {
+	color:black;
+	border-style:none;
+	border-radius: 10px; 
+}
+#seeAlluserList{
+	cursor: pointer;
+}
