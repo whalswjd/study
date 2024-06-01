@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sist.web.dao.BoardDao">
+<resultMap id="InsBoardResultMap" type="com.sist.web.model.InsBoard">
+	<id column="BOARD_NUM" property="boardNum" />
+	<result column="USER_ID" property="userId" />
+	<result column="BOARD_CONTENT" property="boardContent" />
+	<result column="LIKE_CNT" property="likeCnt" />
+	<result column="REG_DATE" property="regDate" />
+</resultMap>
+<resultMap id="InsBoardFileResultMap" type="com.sist.web.model.InsBoardFile">
+	<id column="BOARD_NUM" property="boardNum" />
+	<result column="FILE_NUM" property="fileNum" />
+	<result column="FILE_ORG_NAME" property="fileOrgName" />
+	<result column="FILE_NAME" property="fileName" />
+	<result column="FILE_EXT" property="fileExt" />
+	<result column="FILE_SIZE" property="fileSize" />
+	<result column="REG_DATE" property="regDate" />
+</resultMap>
+<resultMap id="boardAndFile" type="com.sist.web.model.BFC_Profile">
+	<id column="BOARD_NUM" property="boardNum" />
+	<result column="FILE_NUM" property="fileNum" />
+	<result column="BOARD_CONTENT" property="boardContent" />
+	<result column="COMMENT_CNT" property="commentCnt" />
+	<result column="LIKE_CNT" property="likeCnt" />
+	<result column="FILE_ORG_NAME" property="fileOrgName" />
+	<result column="FILE_NAME" property="fileName" />
+	<result column="FILE_EXT" property="fileExt" />
+	<result column="FILE_SIZE" property="fileSize" />
+	<result column="REG_DATE" property="fileRegDate" />
+</resultMap>
+<resultMap id="selectViewResultMap" type="com.sist.web.model.SelectView">
+<id column="BOARD_NUM" property="boardNum" />
+	<result column="BOARD_USER_ID" property="boardUserId" />
+	<result column="LIKE_CNT" property="likeCnt" />
+	<result column="BOARD_REG_DATE" property="boardRegDate" />
+	<result column="BOARD_CONTENT" property="boardContent" />
+	<result column="FILE_NUM" property="fileNum" />
+	<result column="FILE_NAME" property="fileName" />
+	<result column="FILE_EXT" property="fileExt" />
+	<result column="COMMENT_NUM" property="commentNum" />
+	<result column="COMMENT_USER_ID" property="commentUserId" />
+	<result column="COMMENT_USER_FILE_NAME" property="commentUserFileName" />
+	<result column="COMMENT_GROUP" property="commentGroup" />
+	<result column="COMMENT_CONTENT" property="commentContent" />
+	<result column="COMMENT_PARENT" property="commentParent" />
+	<result column="COMMENT_STATUS" property="commentStaus" />
+	<result column="COMMENT_REG_DATE" property="commentRegDate" />
+</resultMap>
+
+<resultMap id="forMainPage" type="com.sist.web.model.ForMainPage">
+	<id column="BOARD_NUM" property="boardNum" />
+	<result column="BOARD_CONTENT" property="boardContent" />
+	<result column="LIKE_CNT" property="likeCnt" />
+	<result column="COMMENT_CNT" property="commentCnt" />
+	<result column="BOARD_FILE_NAME" property="boardFileName" />
+	<result column="FILE_EXT" property="boardFileExt" />
+	<result column="REG_DATE" property="regDate" />
+	<result column="USER_ID" property="userId" />
+	<result column="USER_FILE_NAME" property="userFileName" />
+	<result column="ISLIKE" property="isLike" />
+</resultMap>
+
+<resultMap id="followRelation" type="com.sist.web.model.InsFollow">
+	<id column="FOLLOW_NUM" property="followNum" />
+	<result column="FOLLOWING_COUNT" property="followingCnt" />
+	<result column="FOLLOWER_COUNT" property="followedCnt" />
+	<result column="USER_TO" property="userTo" />
+	<result column="USER_FROM" property="userFrom" />
+	<result column="IS_FOLLOWED" property="isFollow" />
+</resultMap>
+
+<!-- 파일 인서트 -->
+<insert id="boardFileInsert" parameterType="com.sist.web.model.InsBoardFile">
+	insert into INS_BOARD_FILE (
+    BOARD_NUM,
+    FILE_NUM,
+    FILE_ORG_NAME,
+    FILE_NAME,
+    FILE_EXT,
+    FILE_SIZE,
+    REG_DATE
+) values (
+    #{boardNum},
+    (SELECT MAX(FILE_NUM)+1 FROM INS_BOARD_FILE),
+    #{fileOrgName},
+    #{fileName},
+    #{fileExt},
+    #{fileSize},
+    SYSDATE
+)
+</insert>
+<!-- 게시물 인서트 -->
+<insert id="boardInsert" parameterType="com.sist.web.model.InsBoard">
+ <selectKey resultType="long" keyProperty="boardNum" order="BEFORE">
+ 	SELECT INS_BOARD_SEQ.NEXTVAL FROM DUAL
+ </selectKey>
+	INSERT INTO INS_BOARD
+				(BOARD_NUM,
+				USER_ID,
+				BOARD_CONTENT,
+				LIKE_CNT,
+				REG_DATE)
+	 VALUES
+				(#{boardNum},#{userId},#{boardContent},0,SYSDATE)
+</insert>
+<!-- 댓글 인서트 -->
+<insert id="commentInsert" parameterType="com.sist.web.model.BoardComment">
+ <selectKey resultType="long" keyProperty="commentNum" order="BEFORE">
+ SELECT INS_COMMENT_SEQ.NEXTVAL FROM DUAL
+ </selectKey>
+INSERT INTO INS_COMMENT (
+    COMMENT_NUM,
+    BOARD_NUM,
+    USER_ID,
+    COMMENT_CONTENT,
+    COMMENT_GROUP,
+    COMMENT_PARENT,
+    STATUS,
+    REG_DATE
+) VALUES (
+    #{commentNum},
+    #{boardNum},
+    #{userId},
+    #{commentContent},
+    #{commentNum},
+    #{commentParent},
+    'Y',
+    SYSDATE
+)
+</insert>
+<!-- 답글 인서트 -->
+<insert id="commentreplyInsert" parameterType="com.sist.web.model.BoardComment">
+ <selectKey resultType="long" keyProperty="commentNum" order="BEFORE">
+ SELECT INS_COMMENT_SEQ.NEXTVAL FROM DUAL
+ </selectKey>
+INSERT INTO INS_COMMENT (
+    COMMENT_NUM,
+    BOARD_NUM,
+    USER_ID,
+    COMMENT_CONTENT,
+    COMMENT_GROUP,
+    COMMENT_PARENT,
+    STATUS,
+    REG_DATE
+) VALUES (
+    #{commentNum},
+    #{boardNum},
+    #{userId},
+    #{commentContent},
+    #{commentGroup},
+    #{commentParent},
+    'Y',
+    SYSDATE
+)
+</insert>
+<!-- 좋아요 -->
+<insert id="insBoardLikeInsert" parameterType="com.sist.web.model.InsLike">
+<selectKey resultType="long" keyProperty="likeNum" order="BEFORE">
+ SELECT INS_LIKE_SEQ.NEXTVAL FROM DUAL
+ </selectKey>
+insert into INS_LIKE (
+    LIKE_NUM,
+    <choose>
+    <when test='boardNum!=0'>
+    BOARD_NUM,
+     </when>
+    <otherwise>
+    COMMENT_NUM,
+    </otherwise>
+    </choose>
+    USER_ID,
+    REG_DATE
+) values (
+    #{likeNum},
+    <choose>
+    <when test='boardNum!=0'>
+    #{boardNum},
+    </when>
+    <otherwise>
+    #{commentNum},
+    </otherwise>
+    </choose>
+    #{userId},
+    SYSDATE
+)
+</insert>
+<!-- 팔로우 인서트 -->
+<insert id="insertFollow" parameterType="com.sist.web.model.InsFollow">
+INSERT INTO INS_FOLLOW
+(FOLLOW_NUM, USER_TO, USER_FROM)
+VALUES
+((SELECT MAX(FOLLOW_NUM)+1 FROM INS_FOLLOW), #{userFrom}, #{userTo})
+</insert>
+
+<!-- 보드 카운트 업데이트 -->
+<update id="updateBoardComment" parameterType="long">
+UPDATE INS_BOARD
+SET
+    COMMENT_CNT = NVL(COMMENT_CNT,0) + 1
+WHERE
+        BOARD_NUM = #{value}
+</update>
+<!-- 좋아요 수 변동 -->
+<update id="updateLikeCnt" parameterType="long">
+UPDATE INS_BOARD
+SET
+	<if test='disLike == 0'>
+       LIKE_CNT = NVL(LIKE_CNT, 0) + 1
+    </if>
+    <if test='disLike !=0'>
+    LIKE_CNT = NVL(LIKE_CNT,0) - 1
+    </if>
+WHERE
+        BOARD_NUM = #{boardNum}
+</update>
+<!-- 좋아요 수 변동 (테이블에서 del) -->
+<delete id="delLike" parameterType="com.sist.web.model.InsLike">
+DELETE FROM ins_like
+WHERE 1=1
+<choose>
+	<when test='boardNum != 0'>
+    AND board_num = #{boardNum}
+    </when>
+    <when test='commentNum != 0'>
+    AND comment_num = #{commentNum}
+    </when>
+</choose>
+    AND user_id = #{userId}
+</delete>
+
+<delete id="boardDelProc" parameterType="long" statementType="CALLABLE">
+    BEGIN
+        DELETE FROM INS_COMMENT WHERE BOARD_NUM = #{value};
+        DELETE FROM INS_BOARD_FILE WHERE BOARD_NUM = #{value};
+        DELETE FROM INS_LIKE WHERE BOARD_NUM = #{value};
+        DELETE FROM INS_BOARD WHERE BOARD_NUM = #{value};
+    END;
+</delete>
+
+
+
+<!-- 1 유저 게시글 수 -->
+<select id="oneUserBoardCnt" parameterType="String" resultType="int">
+SELECT COUNT (BOARD_NUM)
+FROM INS_BOARD
+WHERE USER_ID = #{value}
+</select>
+<!-- 프로필 페이지용 셀렉 -->
+<select id="profilePage" parameterType="String" resultMap="boardAndFile">
+SELECT A.BOARD_NUM AS BOARD_NUM,
+               NVL(B.BOARD_CONTENT,'') BOARD_CONTENT,
+               NVL(B.LIKE_CNT,0) LIKE_CNT,
+               NVL(B.COMMENT_CNT,0) COMMENT_CNT,
+               NVL(A.FILE_NUM,'')FILE_NUM,
+               NVL(A.FILE_ORG_NAME,'') FILE_ORG_NAME,
+               NVL(A.FILE_NAME,'') FILE_NAME,
+               NVL(A.FILE_EXT,'') FILE_EXT,
+               NVL(A.FILE_SIZE,0) FILE_SIZE,
+               NVL(TO_CHAR(B.REG_DATE,'YYYY.MM.DD'),'') REG_DATE
+          FROM INS_BOARD_FILE A, INS_BOARD B
+         WHERE 1=1
+           AND A.BOARD_NUM = B.BOARD_NUM
+           AND B.USER_ID = #{userId}
+         ORDER BY A.REG_DATE DESC
+</select>
+<select id="followCnt" parameterType="String" resultMap="followRelation">
+SELECT 
+    (SELECT NVL(COUNT(*),0) FROM INS_FOLLOW WHERE USER_FROM = #{value}) AS FOLLOWING_COUNT,
+    (SELECT NVL(COUNT(*),0) FROM INS_FOLLOW WHERE USER_TO = #{value}) AS FOLLOWER_COUNT
+FROM DUAL
+</select>
+
+<!-- 게시물 상세보기 페이지 (게시글+답글) -->
+<select id="selectView" parameterType="long" resultMap="selectViewResultMap">
+SELECT B.BOARD_NUM BOARD_NUM,
+       B.USER_ID BOARD_USER_ID,
+       NVL(B.LIKE_CNT,0) LIKE_CNT,
+       NVL(B.BOARD_CONTENT,'') BOARD_CONTENT, 
+       NVL(TO_CHAR(B.REG_DATE,'YYYY.MM.DD HH24.MI.SS'),'') BOARD_REG_DATE,
+       F.FILE_NUM,
+       F.FILE_NAME,
+       NVL(F.FILE_EXT,'') FILE_EXT,
+       NVL(C.COMMENT_NUM,0) COMMENT_NUM,
+       NVL(C.USER_ID,'') COMMENT_USER_ID,
+       NVL(U.FILE_NAME,'') COMMENT_USER_FILE_NAME,
+       NVL(C.COMMENT_GROUP,0) COMMENT_GROUP,
+       NVL(C.COMMENT_CONTENT,'') COMMENT_CONTENT,
+       NVL(C.COMMENT_PARENT,0) COMMENT_PARENT,
+       NVL(C.STATUS,'') COMMENT_STATUS,
+       NVL(TO_CHAR(C.REG_DATE,'YYYY.MM.DD.HH24.MI.SS'),'') COMMENT_REG_DATE
+  FROM INS_BOARD B, INS_BOARD_FILE F, INS_COMMENT C, INS_USER_FILE U
+  WHERE 1=1
+    AND B.BOARD_NUM = F.BOARD_NUM(+)
+    AND B.BOARD_NUM = C.BOARD_NUM(+)
+    AND C.USER_ID = U.USER_ID(+)
+    AND B.BOARD_NUM = #{value}
+  ORDER BY C.COMMENT_GROUP DESC, C.REG_DATE ASC
+</select>
+
+<select id="isFollow" parameterType="com.sist.web.model.InsFollow" resultType="int">
+SELECT COUNT(FOLLOW_NUM) AS IS_FOLLOWED
+  FROM INS_FOLLOW
+ WHERE 1=1 
+   AND USER_FROM = #{userTo} 
+   AND USER_TO= #{userFrom}
+</select>
+
+<select id="likeOrNot" parameterType="com.sist.web.model.InsLike" resultType="int">
+SELECT COUNT(LIKE_NUM)
+  FROM INS_LIKE
+ WHERE 1=1
+ <choose>
+ 	<when test="boardNum != 0">
+   AND BOARD_NUM = #{boardNum}
+ 	</when>
+ 	<when test="commentNum != 0">
+   AND COMMENT_NUM = #{commentNum}
+    </when>
+ </choose>
+   AND USER_ID = #{userId}
+</select>
+
+<!-- 메인보드 불러오기! -->
+<select id="loadMainBoard" parameterType="String" resultMap="forMainPage">
+SELECT  F.BOARD_NUM, 
+        MAX(DBMS_LOB.SUBSTR(F.BOARD_CONTENT, 1000, 1)) AS BOARD_CONTENT,
+        MAX(F.LIKE_CNT) AS LIKE_CNT, 
+        MAX(F.FILE_NAME) AS BOARD_FILE_NAME, 
+        MAX(F.FILE_EXT) AS FILE_EXT,
+        MAX(F.REG_DATE) AS REG_DATE, 
+        MAX(F.USER_ID) AS USER_ID,
+        MAX(F.USER_FILE_NAME) AS USER_FILE_NAME,
+        NVL(COUNT(CASE WHEN L.USER_ID = #{value} THEN L.LIKE_NUM END),0) AS ISLIKE
+FROM (SELECT NVL(B.BOARD_NUM, 0) AS BOARD_NUM,
+             B.BOARD_CONTENT,
+             NVL(B.LIKE_CNT, 0) AS LIKE_CNT,
+             B.USER_ID,
+             NVL(U.FILE_NAME, '') AS USER_FILE_NAME,
+             NVL(B.COMMENT_CNT, 0) AS COMMENT_CNT,
+             NVL(A.FILE_NAME, '') AS FILE_NAME,
+             NVL(A.FILE_EXT, '') AS FILE_EXT,
+             NVL(TO_CHAR(TRUNC(SYSDATE) - TRUNC(B.REG_DATE)), '') AS REG_DATE
+        FROM INS_BOARD B, INS_BOARD_FILE A, INS_USER_FILE U
+       WHERE 1=1
+         AND (B.USER_ID IN (SELECT USER_TO FROM INS_FOLLOW WHERE USER_FROM = #{value}) OR B.USER_ID = #{value})
+         AND B.BOARD_NUM = A.BOARD_NUM(+)
+         AND B.USER_ID = U.USER_ID(+))F, INS_LIKE L
+WHERE L.BOARD_NUM(+) = F.BOARD_NUM
+GROUP BY F.BOARD_NUM
+ORDER BY F.BOARD_NUM DESC
+</select>
+
+<!-- 메인보드 (친구없는버전...) -->
+<select id="loadMainBoardNoFriends" parameterType="String" resultMap="forMainPage">
+SELECT  F.BOARD_NUM, 
+        MAX(DBMS_LOB.SUBSTR(F.BOARD_CONTENT, 1000, 1)) AS BOARD_CONTENT,
+        MAX(F.LIKE_CNT) AS LIKE_CNT, 
+        MAX(F.FILE_NAME) AS BOARD_FILE_NAME, 
+        MAX(F.FILE_EXT) AS FILE_EXT,
+        MAX(F.REG_DATE) AS REG_DATE, 
+        MAX(F.USER_ID) AS USER_ID,
+        MAX(F.USER_FILE_NAME) AS USER_FILE_NAME,
+        NVL(COUNT(CASE WHEN L.USER_ID = #{value} THEN L.LIKE_NUM END),0) AS ISLIKE
+FROM (SELECT NVL(B.BOARD_NUM, 0) AS BOARD_NUM,
+             B.BOARD_CONTENT,
+             NVL(B.LIKE_CNT, 0) AS LIKE_CNT,
+             B.USER_ID,
+             NVL(U.FILE_NAME, '') AS USER_FILE_NAME,
+             NVL(B.COMMENT_CNT, 0) AS COMMENT_CNT,
+             NVL(A.FILE_NAME, '') AS FILE_NAME,
+             NVL(A.FILE_EXT, '') AS FILE_EXT,
+             NVL(TO_CHAR(TRUNC(SYSDATE) - TRUNC(B.REG_DATE)), '') AS REG_DATE
+        FROM INS_BOARD B, INS_BOARD_FILE A, INS_USER_FILE U
+       WHERE 1=1
+         AND B.BOARD_NUM = A.BOARD_NUM(+)
+         AND B.USER_ID = U.USER_ID(+))F, INS_LIKE L
+WHERE L.BOARD_NUM(+) = F.BOARD_NUM
+GROUP BY F.BOARD_NUM
+ORDER BY F.BOARD_NUM DESC
+</select>
+</mapper>
+
+
+
+
+
+
+
+

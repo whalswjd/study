@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.sist.web.dao.UserDao">
+
+<resultMap id="userResultMap" type="com.sist.web.model.User">
+   <id column="USER_ID" property="userId"/>
+   <result column="USER_PWD" property="userPwd"/>
+   <result column="USER_NAME" property="userName"/>
+   <result column="USER_EMAIL" property="userEmail"/>
+    <result column="USER_TEL" property="userTel"/>
+   <result column="EMAIL_AUTH" property="emailAuth"/>
+   <result column="USER_INTRO" property="userIntro"/>
+   <result column="REG_DATE" property="regDate"/>
+   <result column="STATUS" property="status"/>
+   <result column="BLUE_ID" property="blueId"/>
+   <result column="FILE_NAME" property="userFileName"/>
+</resultMap>
+
+
+<resultMap id="userFileResultMap" type="com.sist.web.model.UserFile">
+<id column="FILE_NUM" property="fileNum"/>
+   <result column="USER_ID" property="userId"/>
+   <result column="FILE_ORG_NAME" property="fileOrgName"/>
+   <result column="FILE_NAME" property="fileName"/>
+    <result column="FILE_EXT" property="fileExt"/>
+   <result column="FILE_SIZE" property="fileSize"/>
+   <result column="REG_DATE" property="regDate"/>
+</resultMap>
+
+<select id="selectRandomUser" parameterType="String" resultMap="userResultMap">
+SELECT USER_ID, USER_NAME, FILE_NAME, BLUE_ID
+  FROM (SELECT NVL(U.USER_ID,'') USER_ID, NVL(U.USER_NAME,'') USER_NAME, NVL(F.FILE_NAME,'') AS FILE_NAME, NVL(U.BLUE_ID,'') BLUE_ID
+          FROM INS_USER U, INS_USER_FILE F
+         WHERE 1=1
+           AND U.USER_ID NOT IN (SELECT USER_TO FROM INS_FOLLOW WHERE USER_FROM = #{userId} OR USER_TO=#{userId})
+           AND U.USER_ID = F.USER_ID(+)
+         ORDER BY dbms_random.value)
+WHERE ROWNUM  <![CDATA[<=]]>  4
+</select>
+
+<select id="selectUser" parameterType="com.sist.web.model.User" resultMap="userResultMap">
+ SELECT 
+       NVL(U.USER_ID, '') USER_ID,
+       NVL(U.USER_PWD,'') USER_PWD,
+       NVL(U.USER_NAME,'') USER_NAME,
+       NVL(U.USER_EMAIL,'') USER_EMAIL,
+       NVL(U.EMAIL_AUTH,'') EMAIL_AUTH,
+       NVL(U.USER_INTRO,'') USER_INTRO,
+       NVL(U.USER_TEL,'') USER_TEL,
+       NVL(TO_CHAR(U.REG_DATE,'YYYY.MM.DD HH24:MI:SS'),'') REG_DATE,
+       NVL(U.STATUS,'') STATUS,
+       NVL(U.BLUE_ID,'') BLUE_ID,
+       NVL(F.FILE_NAME,'') FILE_NAME
+   FROM
+       INS_USER U, INS_USER_FILE F
+ WHERE 1=1
+   AND U.USER_ID = F.USER_ID(+)
+   <choose>
+   <when test='gubun == 1'>
+   AND U.USER_ID = #{userId}
+   </when>
+   <when test='gubun == 2'>
+   and U.USER_EMAIL = #{userEmail}
+   </when>
+   <otherwise>
+   AND U.USER_TEL = #{userTel}
+   </otherwise>
+    </choose>
+</select>
+
+<select id="searchSelect" parameterType="String" resultMap="userResultMap">
+SELECT U.USER_ID, MAX(U.USER_NAME) USER_NAME, MAX(U.BLUE_ID) BLUE_ID, MAX(F.FILE_NAME) FILE_NAME
+  FROM INS_USER U, INS_USER_FILE F
+ WHERE 1=1
+   AND U.USER_ID = F.USER_ID(+)
+   AND U.USER_ID IN ( SELECT USER_ID 
+                        FROM INS_USER 
+                        WHERE USER_ID LIKE '%'||#{value}||'%' 
+                           OR USER_NAME LIKE '%'||#{value}||'%' 
+                           OR U.USER_INTRO LIKE '%'||#{value}||'%')
+ GROUP BY U.USER_ID
+</select>
+
+<insert id="userInsert" parameterType="com.sist.web.model.User">
+INSERT INTO INS_USER (
+    USER_ID,
+    USER_PWD,
+    USER_NAME,
+    USER_EMAIL,
+    EMAIL_AUTH,
+    USER_INTRO,
+    REG_DATE,
+    STATUS
+) VALUES (
+    #{userId},
+    #{userPwd},
+    #{userName},
+    #{userEmail},
+    #{emailAuth},
+    #{userIntro},
+    SYSDATE,
+    #{status}
+)
+</insert>
+
+<update id="userUpdate" parameterType="com.sist.web.model.User">
+UPDATE INS_USER
+SET USER_PWD = #{userPwd},
+	USER_NAME = #{userName},
+    USER_EMAIL = #{userEmail},
+    USER_TEL = #{userTel},
+    EMAIL_AUTH = #{emailAuth},
+    USER_INTRO = #{userIntro},
+    STATUS = #{status}
+WHERE USER_ID= #{userId}
+</update>
+
+<update id="buyerUpdate" parameterType="String">
+UPDATE INS_USER
+   SET BLUE_ID = 'B'
+ WHERE USER_ID = #{value}
+</update>
+
+<insert id="userFileInsert" parameterType="com.sist.web.model.UserFile">
+INSERT INTO INS_USER_FILE
+(FILE_NUM,
+USER_ID,
+FILE_ORG_NAME,
+FILE_NAME,
+FILE_EXT,
+FILE_SIZE,
+REG_DATE)
+VALUES
+(
+(SELECT MAX(FILE_NUM)+1 FROM INS_USER_FILE),
+#{userId},
+#{fileOrgName},
+#{fileName},
+#{fileExt},
+#{fileSize},
+SYSDATE
+)
+</insert>
+
+<select id="userFileSelect" parameterType="String" resultMap="userFileResultMap">
+SELECT 
+FILE_NUM,
+USER_ID,
+FILE_ORG_NAME,
+FILE_NAME,
+FILE_EXT,
+FILE_SIZE,
+REG_DATE
+FROM INS_USER_FILE
+WHERE USER_ID = #{value}
+</select>
+
+<update id="userFileUpdate" parameterType="com.sist.web.model.UserFile">
+UPDATE INS_USER_FILE 
+SET 
+FILE_ORG_NAME = #{fileOrgName},
+FILE_NAME =#{fileName},
+FILE_EXT = #{fileExt},
+FILE_SIZE = #{fileSize},
+REG_DATE = SYSDATE
+WHERE USER_ID = #{userId}
+</update>
+
+<delete id="userFileDel" parameterType="String">
+DELETE 
+  FROM ins_user_file
+ WHERE USER_ID = #{value};
+</delete>
+
+</mapper>
